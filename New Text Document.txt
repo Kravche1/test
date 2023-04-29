@@ -1,0 +1,146 @@
+						Main java
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+public class Main {
+    private static int example1(int[] example1) { /// 150 meti elementebis jamis magaliti
+        int sum = 0;
+        int count = 0;
+        for (int i:
+             example1) {
+            if (i > 150) {
+                sum += i;
+                count ++;
+            }
+        }
+        return sum/count;
+    }
+    private static double example2(int[] example2) { /// kenti ricxvebis sashualo geometriuli
+        double namravli = 1.0;
+        int count = 0;
+        for (int a:
+             example2) {
+            if (a % 2 != 0) {
+                namravli *= 1.0;
+                count ++;
+            }
+        }
+        return Math.pow(namravli, 1.0/count);
+    }
+    public static void main(String[] args) throws ParserConfigurationException, TransformerException {
+
+        int[] example1 = {123,223,431,123,6,7}; /// 150 meti elementebis jamis magaliti
+        System.out.println(Main.example1(example1));
+
+        int[] example2 = {1,2,3,4,5,6,7,8,9}; /// kenti ricxvebis sashualo geometriuli
+        System.out.println(Main.example2(example2));
+
+        ///////////////////////////////////////
+        ///DEPARTMENT EXAMPLE
+        Department dep1 = new Department();
+        dep1.ID = 5;
+        dep1.Name = "gio";
+
+        Department dep2 = new Department();
+        dep2.ID = 6;
+        dep2.Name = "Giorgi";
+
+        System.out.println(dep1.equals(dep2));
+        System.out.println(dep1.equals(dep2));
+
+        ///////////////////////////////////////////////////////
+        XML.generateXML();
+    }
+}
+
+
+							DEPARTMENT java
+
+import java.util.Objects;
+
+public class Department {
+    int ID;
+    String Name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Department that = (Department) o;
+        return ID == that.ID;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID);
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" +
+                "ID=" + ID +
+                ", Name='" + Name + '\'' +
+                '}';
+    }
+}
+
+								XML java
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+
+public class XML {
+    private XML (){
+
+    }
+
+    public static void generateXML() throws ParserConfigurationException, TransformerConfigurationException, TransformerException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.newDocument();
+
+
+        Element rootElement = document.createElement("departments");
+        document.appendChild(rootElement);
+
+        Element departmentElement = document.createElement("department");
+        rootElement.appendChild(departmentElement);
+
+        Element departmentName = document.createElement("name");
+        departmentName.appendChild(document.createTextNode("HR"));
+        departmentElement.appendChild(departmentName);
+
+        Element departmentEmail = document.createElement("email");
+        departmentEmail.appendChild(document.createTextNode("hr@oracle.com"));
+        departmentElement.appendChild(departmentEmail);
+
+        Element studentElement = document.createElement("department");
+        rootElement.appendChild(studentElement);
+
+        Element departmentFirstName = document.createElement("firstname");
+        departmentFirstName.appendChild(document.createTextNode("IT"));
+        studentElement.appendChild(departmentFirstName);
+
+        Element departmentEmail2 = document.createElement("email");
+        departmentEmail2.appendChild(document.createTextNode("it@java.com"));
+        studentElement.appendChild(departmentEmail2);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource domSource = new DOMSource(rootElement);
+
+        StreamResult streamResult = new StreamResult(new File("C:/test/b.xml"));
+        transformer.transform(domSource,streamResult);
+    }
+}
